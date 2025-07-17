@@ -3,7 +3,6 @@ import axios from "axios";
 const API_URL =
   import.meta.env.VITE_API_URL ?? "https://api-berita-indonesia.vercel.app";
 
-// Use JSDoc for type hinting, but do not export the type
 /**
  * @typedef {"terbaru"|"politik"|"hukum"|"ekonomi"|"bola"|"olahraga"|"humaniora"|"lifestyle"|"hiburan"|"dunia"|"tekno"|"otomotif"} AntaraCategory
  */
@@ -18,25 +17,6 @@ export async function getAntaraNews(category = "terbaru") {
     return response.data;
   } catch (error) {
     let message = "Terjadi kesalahan saat mengambil data berita Antara";
-    if (axios.isAxiosError(error)) {
-      message = error.response?.data?.message || error.message || message;
-    } else if (error instanceof Error) {
-      message = error.message || message;
-    }
-    throw new Error(message);
-  }
-}
-
-/**
- * Ambil semua berita dari endpoint utama (tanpa kategori spesifik)
- * @returns {Promise<any>}
- */
-export async function getAllNews() {
-  try {
-    const response = await axios.get(`${API_URL}`);
-    return response.data;
-  } catch (error) {
-    let message = "Terjadi kesalahan saat mengambil semua data berita Antara";
     if (axios.isAxiosError(error)) {
       message = error.response?.data?.message || error.message || message;
     } else if (error instanceof Error) {

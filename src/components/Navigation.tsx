@@ -72,7 +72,6 @@ const Navigation: React.FC = () => {
         </span>
       </NavLink>
 
-      {/* Desktop Nav (hanya tampil di xl ke atas) */}
       <nav
         className={`space-x-4 font-inter font-medium transition-colors duration-300 ${
           isXL ? "flex" : "hidden"
@@ -132,12 +131,10 @@ const Navigation: React.FC = () => {
       {/* Mobile Nav */}
       {!isXL && (
         <nav
-          className={`fixed top-0 right-0 z-50 h-full w-64 bg-white shadow-lg transform transition-transform duration-300 font-inter font-medium flex flex-col pt-24 px-8 gap-4
-        ${open ? "translate-x-0" : "translate-x-full"}`}
-          style={{
-            backgroundColor: scrolled ? "#2563eb" : "#fff",
-            color: scrolled ? "#fff" : "#222",
-          }}>
+          className={`fixed top-0 right-0 z-50 h-full w-64 shadow-lg transform transition-transform duration-300 font-inter font-medium flex flex-col pt-8 px-8 gap-5
+            ${open ? "translate-x-0" : "translate-x-full"}
+            ${scrolled ? "bg-primary text-white" : "bg-white text-[#222]"}
+          `}>
           <button
             className="absolute top-6 right-6 text-2xl font-bold focus:outline-none"
             aria-label="Close navigation"

@@ -1,8 +1,9 @@
 import { NavLink } from "react-router-dom";
 import logoNav from "../assets/logo-nav.png";
 import logoFoot from "../assets/logo-footer.png";
-import React, { useState } from "react";
+import React from "react";
 import useScroll from "../hooks/useScroll";
+import useHamburger from "../hooks/useHamburger";
 
 // Sesuaikan kategori dengan kebutuhan aplikasi
 const navLinks = [
@@ -20,13 +21,35 @@ const navLinks = [
   { to: "/otomotif", label: "Otomotif" },
 ];
 
+// Custom hook untuk deteksi lebar layar >= 1200px (xl)
+function useIsXL() {
+  const [isXL, setIsXL] = React.useState(() => {
+    if (typeof window !== "undefined") {
+      return window.innerWidth >= 1200;
+    }
+    return false;
+  });
+
+  React.useEffect(() => {
+    function handleResize() {
+      setIsXL(window.innerWidth >= 1200);
+    }
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  return isXL;
+}
+
 const Navigation: React.FC = () => {
   const scrolled = useScroll();
-  const [open, setOpen] = useState(false);
+  const isXL = useIsXL();
+  const { open, closeMenu, toggleMenu } = useHamburger();
 
   // Tutup menu saat navigasi
-  const handleNavClick = () => setOpen(false);
+  const handleNavClick = () => closeMenu();
 
+  // Tampilkan hamburger jika < 1200px, desktop nav jika >= 1200px
   return (
     <header
       className={`py-4 px-[24px] md:px-[72px] border-b-slate-100 shadow-sm flex justify-between items-center transition-colors duration-300 ${
@@ -48,8 +71,12 @@ const Navigation: React.FC = () => {
           Berita Kita
         </span>
       </NavLink>
-      {/* Desktop Nav */}
-      <nav className="space-x-4 font-inter font-medium transition-colors duration-300 hidden md:flex">
+
+      {/* Desktop Nav (hanya tampil di xl ke atas) */}
+      <nav
+        className={`space-x-4 font-inter font-medium transition-colors duration-300 ${
+          isXL ? "flex" : "hidden"
+        }`}>
         {navLinks.map(({ to, label, end }) => (
           <NavLink
             key={to}
@@ -58,7 +85,7 @@ const Navigation: React.FC = () => {
             className={({ isActive }: { isActive: boolean }) =>
               scrolled
                 ? `hover:text-white transition-colors${
-                    isActive ? " text-white font-bold" : ""
+                    isActive ? " text-secondary font-bold" : ""
                   }`
                 : `hover:text-primary transition-colors${
                     isActive ? " text-primary font-bold" : ""
@@ -69,67 +96,76 @@ const Navigation: React.FC = () => {
           </NavLink>
         ))}
       </nav>
-      {/* Hamburger Button */}
-      <button
-        className="md:hidden flex flex-col justify-center items-center w-10 h-10 rounded focus:outline-none"
-        aria-label="Toggle navigation"
-        onClick={() => setOpen((prev) => !prev)}>
-        <span
-          className={`block w-6 h-0.5 bg-current transition-all duration-300 ${
-            open ? "rotate-45 translate-y-1.5" : ""
-          }`}></span>
-        <span
-          className={`block w-6 h-0.5 bg-current my-1 transition-all duration-300 ${
-            open ? "opacity-0" : ""
-          }`}></span>
-        <span
-          className={`block w-6 h-0.5 bg-current transition-all duration-300 ${
-            open ? "-rotate-45 -translate-y-1.5" : ""
-          }`}></span>
-      </button>
-      {/* Mobile Nav Overlay */}
-      <div
-        className={`fixed inset-0 z-40 bg-black bg-opacity-40 transition-opacity duration-300 ${
-          open
-            ? "opacity-100 pointer-events-auto"
-            : "opacity-0 pointer-events-none"
-        } md:hidden`}
-        onClick={() => setOpen(false)}></div>
-      {/* Mobile Nav */}
-      <nav
-        className={`fixed top-0 right-0 z-50 h-full w-64 bg-white shadow-lg transform transition-transform duration-300 font-inter font-medium flex flex-col pt-24 px-8 gap-6
-        ${open ? "translate-x-0" : "translate-x-full"} md:hidden`}
-        style={{
-          backgroundColor: scrolled ? "#2563eb" : "#fff",
-          color: scrolled ? "#fff" : "#222",
-        }}>
+
+      {/* Hamburger Button (tampil jika < 1200px) */}
+      {!isXL && (
         <button
-          className="absolute top-6 right-6 text-2xl font-bold focus:outline-none"
-          aria-label="Close navigation"
-          onClick={() => setOpen(false)}>
-          ×
+          className="flex flex-col justify-center items-center w-10 h-10 rounded focus:outline-none"
+          aria-label="Toggle navigation"
+          onClick={toggleMenu}>
+          <span
+            className={`block w-6 h-0.5 bg-current transition-all duration-300 ${
+              open ? "rotate-45 translate-y-1.5" : ""
+            }`}></span>
+          <span
+            className={`block w-6 h-0.5 bg-current my-1 transition-all duration-300 ${
+              open ? "opacity-0" : ""
+            }`}></span>
+          <span
+            className={`block w-6 h-0.5 bg-current transition-all duration-300 ${
+              open ? "-rotate-45 -translate-y-1.5" : ""
+            }`}></span>
         </button>
-        {navLinks.map(({ to, label, end }) => (
-          <NavLink
-            key={to}
-            to={to}
-            end={end}
-            className={({ isActive }: { isActive: boolean }) =>
-              `${
-                scrolled ? "hover:text-white" : "hover:text-primary"
-              } transition-colors text-lg py-2 px-2 rounded ${
-                isActive
-                  ? scrolled
-                    ? "text-white font-bold"
-                    : "text-primary font-bold"
-                  : ""
-              }`
-            }
-            onClick={handleNavClick}>
-            {label}
-          </NavLink>
-        ))}
-      </nav>
+      )}
+
+      {/* Mobile Nav Overlay */}
+      {!isXL && (
+        <div
+          className={`fixed inset-0 z-40 bg-black bg-opacity-40 transition-opacity duration-300 ${
+            open
+              ? "opacity-100 pointer-events-auto"
+              : "opacity-0 pointer-events-none"
+          }`}
+          onClick={closeMenu}></div>
+      )}
+
+      {/* Mobile Nav */}
+      {!isXL && (
+        <nav
+          className={`fixed top-0 right-0 z-50 h-full w-64 bg-white shadow-lg transform transition-transform duration-300 font-inter font-medium flex flex-col pt-24 px-8 gap-4
+        ${open ? "translate-x-0" : "translate-x-full"}`}
+          style={{
+            backgroundColor: scrolled ? "#2563eb" : "#fff",
+            color: scrolled ? "#fff" : "#222",
+          }}>
+          <button
+            className="absolute top-6 right-6 text-2xl font-bold focus:outline-none"
+            aria-label="Close navigation"
+            onClick={closeMenu}>
+            ×
+          </button>
+          {navLinks.map(({ to, label, end }) => (
+            <NavLink
+              key={to}
+              to={to}
+              end={end}
+              className={({ isActive }: { isActive: boolean }) =>
+                `${
+                  scrolled ? "hover:text-white" : "hover:text-primary"
+                } transition-colors text-base py-0 px-1 rounded ${
+                  isActive
+                    ? scrolled
+                      ? "text-secondary font-medium"
+                      : "text-primary font-medium"
+                    : ""
+                }`
+              }
+              onClick={handleNavClick}>
+              {label}
+            </NavLink>
+          ))}
+        </nav>
+      )}
     </header>
   );
 };

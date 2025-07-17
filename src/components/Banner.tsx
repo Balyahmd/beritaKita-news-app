@@ -18,7 +18,7 @@ const Banner: React.FC = () => {
   const slide = slides[current] ?? slides[0];
 
   return (
-    <div className="relative mt-10 px-[72px] flex flex-col items-center">
+    <div className="relative mt-10 md:px-[72px]  flex flex-col items-center">
       <img
         src={slide?.img ?? bannerImg}
         alt="Banner"

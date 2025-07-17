@@ -20,8 +20,6 @@ const CardArticleRecome: React.FC<CardRecomeProps> = ({
     <div className="bg-whip-4 w-full max-w-xs">
       <Link
         to={`/${category}/detail/${link.split("/").pop()}`}
-        target="_blank"
-        rel="noopener noreferrer"
         className="block">
         <div className="w-full h-40 rounded-xl overflow-hidden mb-3">
           <img

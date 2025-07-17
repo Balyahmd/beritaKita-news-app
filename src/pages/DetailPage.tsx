@@ -156,14 +156,16 @@ const DetailPage: React.FC = () => {
                   </span>
                 ) : (
                   related.map((item) => (
-                    <CardArticleRecome
-                      key={item.id}
-                      title={item.title}
-                      thumbnail={item.thumbnail}
-                      category={category ?? ""}
-                      pubDate={item.pubDate}
-                      link={item.link}
-                    />
+                    <div className="flex items-center justify-center">
+                      <CardArticleRecome
+                        key={item.id}
+                        title={item.title}
+                        thumbnail={item.thumbnail}
+                        category={category ?? ""}
+                        pubDate={item.pubDate}
+                        link={item.link}
+                      />
+                    </div>
                   ))
                 )}
               </div>

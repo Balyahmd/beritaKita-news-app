@@ -77,7 +77,6 @@ const Home: React.FC = () => {
     return null;
   };
 
-  // Refs for scroll animation
   const headlineRef = useRef(null);
   const populerRef = useRef(null);
   const rekomendasiRef = useRef(null);
@@ -102,7 +101,7 @@ const Home: React.FC = () => {
       transition={{ duration: 0.4 }}
       className="px-7">
       {/* Headline Section */}
-      <div className="mt-5 pt-7" ref={headlineRef}>
+      <div className=" mt-5 md:mt-16 pt-7" ref={headlineRef}>
         {loading || error ? (
           renderStatus()
         ) : headline ? (
@@ -122,7 +121,8 @@ const Home: React.FC = () => {
                   month: "short",
                   year: "numeric",
                 })}
-                link={selectedCategory}
+                link={headline.link}
+                category={selectedCategory}
               />
             </motion.div>
 
@@ -142,7 +142,7 @@ const Home: React.FC = () => {
       </div>
 
       {/* Berita Terpopuler */}
-      <div className="py-12" ref={populerRef}>
+      <div className="md:py-12 py-6" ref={populerRef}>
         <motion.section
           initial={{ opacity: 0, x: -20 }}
           animate={
@@ -192,13 +192,13 @@ const Home: React.FC = () => {
         animate={rekomendasiInView ? { opacity: 1 } : { opacity: 0 }}
         transition={{ delay: 0.2, duration: 0.6 }}
         className="mt-8">
-        <div className="flex items-center justify-between mb-4">
-          <div className="border-l-4 border-blue-600 pl-4 mb-8">
+        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between mb-4">
+          <div className="border-l-4 border-blue-600 pl-4 mb-2 md:mb-8">
             <h2 className="text-xl font-bold text-gray-800">
               Rekomendasi Untuk Anda
             </h2>
           </div>
-          <div className="relative w-96">
+          <div className="relative w-full md:w-96">
             <input
               type="text"
               placeholder="Cari berita di sini..."
@@ -231,13 +231,15 @@ const Home: React.FC = () => {
                     transition={{
                       delay: rekomendasiInView ? index * 0.05 : 0,
                     }}>
-                    <CardArticleRecome
-                      title={item.title}
-                      thumbnail={item.thumbnail}
-                      category={selectedCategory}
-                      pubDate={item.pubDate}
-                      link={item.link}
-                    />
+                    <div className="flex items-center justify-center">
+                      <CardArticleRecome
+                        title={item.title}
+                        thumbnail={item.thumbnail}
+                        category={selectedCategory}
+                        pubDate={item.pubDate}
+                        link={item.link}
+                      />
+                    </div>
                   </motion.div>
                 ))}
             </div>

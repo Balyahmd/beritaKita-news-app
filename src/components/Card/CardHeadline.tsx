@@ -21,7 +21,7 @@ const CardHeadline: React.FC<CardHeadlineProps> = ({
 }) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 items-start bg-white w-full overflow-hidden">
-      <div className="flex flex-col max-w-xl justify-center md:pr-4 py-6">
+      <div className="flex flex-col max-w-xl justify-center md:pr-4">
         <div className="text-xs text-gray-400 mb-2">Headline</div>
         <h2 className="text-2xl font-semibold text-gray-900 leading-tight mb-2">
           {title}
@@ -37,11 +37,8 @@ const CardHeadline: React.FC<CardHeadlineProps> = ({
             </span>
           </div>
           <Link
-            to={
-              category ? `/${category}/detail/${link.split("/").pop()}` : link
-            }
+            to={`/${category}/detail/${link.split("/").pop()}`}
             className="text-blue-600 text-sm font-medium hover:underline flex items-center group"
-            target="_blank"
             rel="noopener noreferrer">
             Baca Selengkapnya
             <svg

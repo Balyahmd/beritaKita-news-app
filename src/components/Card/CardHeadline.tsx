@@ -26,7 +26,7 @@ const CardHeadline: React.FC<CardHeadlineProps> = ({
         <h2 className="text-2xl font-semibold text-gray-900 leading-tight mb-2">
           {title}
         </h2>
-        <p className="font-inter text-gray-400 mb-5 line-clamp-3">
+        <p className="font-inte font-regular text-sm text-[#4F4F4F] mb-5 line-clamp-4 leading-6">
           {description}
         </p>
         <div className="items-center gap-4">

@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import RenderComments from "./renderComments";
+import PaginationComment from "../Pagination/PaginatioanComment";
+
 type Comment = {
   id: number;
   user: {
@@ -38,10 +40,16 @@ const initialComments: Comment[] = [
   },
 ];
 
+const PER_PAGE_OPTIONS = [2, 5, 10];
+
 const KomentarSection: React.FC = () => {
   const [comments, setComments] = useState<Comment[]>(initialComments);
   const [commentText, setCommentText] = useState("");
   const [replyTo, setReplyTo] = useState<number | null>(null);
+
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const [perPage, setPerPage] = useState(PER_PAGE_OPTIONS[0]);
 
   // Handler untuk mengirim komentar baru atau balasan
   const handleSend = () => {
@@ -66,6 +74,7 @@ const KomentarSection: React.FC = () => {
         replies: [],
       };
       setComments([newComment, ...comments]);
+      setCurrentPage(1); // Reset ke halaman pertama setelah komentar baru
     } else {
       // Balasan
       const addReply = (commentsList: Comment[]): Comment[] =>
@@ -112,6 +121,23 @@ const KomentarSection: React.FC = () => {
     setCommentText("");
   };
 
+  // Pagination logic
+  const perPageSafe = perPage ?? 5; // Default to 5 if perPage is undefined
+  const totalItems = comments.length;
+  const paginatedComments = comments.slice(
+    (currentPage - 1) * perPageSafe,
+    currentPage * perPageSafe
+  );
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
+  const handlePerPageChange = (newPerPage: number) => {
+    setPerPage(newPerPage);
+    setCurrentPage(1);
+  };
+
   return (
     <div className="bg-white py-10 my-12">
       <div className="flex items-center mb-8">
@@ -130,7 +156,7 @@ const KomentarSection: React.FC = () => {
           {replyTo === null && (
             <>
               <textarea
-                className="w-full border border-gray-200 rounded-lg p-3 min-h-[150px] resize-none focus:outline-none focus:ring-2 focus:ring-blue-100"
+                className="w-full border border-gray-200 font-inter font-regular text-[#333333] rounded-lg p-3 min-h-[150px] resize-none focus:outline-none focus:ring-2 focus:ring-blue-100"
                 placeholder="Apa yang ingin anda tanyakan?"
                 maxLength={500}
                 value={commentText}
@@ -142,7 +168,7 @@ const KomentarSection: React.FC = () => {
                   onClick={handleSend}>
                   Kirim
                 </button>
-                <span className="text-xs text-gray-300">
+                <span className="text-[#333333] font-inter font-regular">
                   {commentText.length}/500
                 </span>
               </div>
@@ -158,7 +184,7 @@ const KomentarSection: React.FC = () => {
           </div>
         ) : (
           <div>
-            {comments.map((comment) => (
+            {paginatedComments.map((comment) => (
               <div key={comment.id}>
                 <RenderComments
                   commentsList={[comment]}
@@ -171,6 +197,14 @@ const KomentarSection: React.FC = () => {
                 <hr className="border-b border-gray-200 my-4" />
               </div>
             ))}
+            <PaginationComment
+              totalItems={totalItems}
+              perPageOptions={PER_PAGE_OPTIONS}
+              currentPage={currentPage}
+              perPage={perPage ?? (PER_PAGE_OPTIONS[0] as number)}
+              onPageChange={handlePageChange}
+              onPerPageChange={handlePerPageChange}
+            />
           </div>
         )}
       </div>

@@ -40,7 +40,7 @@ const RenderComments: React.FC<RenderCommentsProps> = ({
           />
           <div className="flex-1">
             <div className="flex items-center gap-2">
-              <span className="font-semibold text-gray-800">
+              <span className="font-inter font-medium text-xs text-[#526071]">
                 {comment.user.name}
               </span>
               {comment.user.title && (
@@ -48,7 +48,10 @@ const RenderComments: React.FC<RenderCommentsProps> = ({
                   {comment.user.title}
                 </span>
               )}
-              <span className="text-xs text-gray-400 ml-2">{comment.date}</span>
+              <span className="text-gray-300">•</span>
+              <span className="text-xs font-inter font-medium text-[#959EA9]">
+                {comment.date}
+              </span>
             </div>
             <div className="text-gray-700 mt-1 mb-2">{comment.content}</div>
             <button

@@ -97,7 +97,9 @@ const DetailPage: React.FC = () => {
           </h1>
           <div className="py-4">
             <div className="flex items-center gap-2 text-sm text-gray-500">
-              <span className="text-blue-600 font-medium">{category}</span>
+              <span className="text-blue-600 font-inter font-regular">
+                {category}
+              </span>
               <span className="text-gray-300">•</span>
               <span>
                 {news.pubDate
@@ -116,12 +118,11 @@ const DetailPage: React.FC = () => {
             className="w-full h-64 object-cover rounded-lg mb-4"
           />
           {news.description && (
-            <p className="text-gray-500 text-sm font-inter font-medium mb-6">
+            <p className="text-[#959EA9] text-sm font-inter font-medium mb-6">
               {news.description}
             </p>
           )}
-          <div className="text-gray-800 leading-relaxed space-y-4">
-            {/* Jika ada konten detail, tampilkan. Jika tidak, tampilkan placeholder */}
+          <div className="text-[#526071] text-sm font-inter leading-relaxed space-y-4">
             {news.description ? (
               <p>{news.description}</p>
             ) : (
@@ -140,7 +141,7 @@ const DetailPage: React.FC = () => {
           </div>
           <div>
             <KomentarSection />
-            <div className="py-10">
+            <div className="py-4 md:py-8">
               <div className="border-l-4 border-blue-600 pl-4 mb-8 flex items-center justify-between">
                 <h2 className="font-bold">Berita Terkait</h2>
                 <Link

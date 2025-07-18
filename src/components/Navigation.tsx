@@ -49,7 +49,6 @@ const Navigation: React.FC = () => {
   // Tutup menu saat navigasi
   const handleNavClick = () => closeMenu();
 
-  // Tampilkan hamburger jika < 1200px, desktop nav jika >= 1200px
   return (
     <header
       className={`py-4 px-[24px] md:px-[72px] border-b-slate-100 shadow-sm flex justify-between items-center transition-colors duration-300 ${
